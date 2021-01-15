@@ -1,2 +1,4 @@
 .idea/
 venv/
+examples/
+.DS_Store
