@@ -6,7 +6,7 @@ class SeamCarvingNonOpt:
 
     def __init__(self, image: np.ndarray):
         print ('Not optimized')
-        self.image = image
+        self.image = np.copy(image)
         self.height, self.width, self.channels = image.shape
 
     def energy(self, y: int, x: int) -> float:

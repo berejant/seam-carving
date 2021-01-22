@@ -77,6 +77,7 @@ if __name__ == "__main__":
             seamCarving.remove_seam(seam)
 
         cv2.imshow(window_name, seamCarving.image)
+        cv2.imshow(window_name + '_original', image)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 

@@ -11,7 +11,7 @@ class SeamCarving:
     backtrace: numpy.core._multiarray_umath.ndarray
 
     def __init__(self, image: np.ndarray):
-        self.image = image
+        self.image = np.copy(image)
         self.height, self.width, self.channels = image.shape
         # noinspection PyTypeChecker
         self.energy_matrix = np.fromfunction(np.vectorize(self.energy), (self.height, self.width), dtype=np.float32)
