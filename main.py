@@ -4,6 +4,7 @@ import sys, getopt
 import cv2
 from SeamCarving import SeamCarving
 from SeamCarvingNonOpt import SeamCarvingNonOpt
+from SeamCarvingWithMask import SeamCarvingWithMask
 
 if __name__ == "__main__":
     cmd_template = sys.argv[0] + " --crop <pixel_for_crop> --silent <input_file> [<output_file>]" \
@@ -14,8 +15,8 @@ if __name__ == "__main__":
                                  "<output_file> path for save result"
 
     try:
-        shortopts = "hsc:O"
-        longopt = ["help", "silent", "crop=", "non-opt"]
+        shortopts = "hsc:m:O"
+        longopt = ["help", "silent", "crop=", "mask=", "non-opt"]
         opts, args = getopt.getopt(sys.argv[1:], shortopts, longopt)
         opts.extend(getopt.getopt(args[2:], shortopts, longopt)[0])
         if not args:
@@ -30,6 +31,7 @@ if __name__ == "__main__":
     silent = False
     crop = 100
     use_opt = True
+    mask = None
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print(cmd_template)
@@ -40,6 +42,8 @@ if __name__ == "__main__":
             silent = True
         elif opt in ("-O", "--non-opt"):
             use_opt = False
+        elif opt in ("-m", "--mask"):
+            mask = arg
 
     if crop < 1:
         print("Bad crop size: " + str(crop))
@@ -54,7 +58,11 @@ if __name__ == "__main__":
         print('Failed to read ' + input)
         sys.exit(-1)
 
-    seamCarving = SeamCarving(image) if use_opt else SeamCarvingNonOpt(image)
+    if mask is None:
+        seamCarving = SeamCarving(image) if use_opt else SeamCarvingNonOpt(image)
+    else:
+        mask = cv2.imread(mask)
+        seamCarving = SeamCarvingWithMask(image, mask)
 
     if silent:
         for i in range(crop):
